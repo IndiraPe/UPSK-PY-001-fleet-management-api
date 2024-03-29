@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv(".env.development.local")
 
 def connection_db():
-    """ Conectar a la base de datos en Vercel-postgreSQL """
+    """ Connect to database in Vercel-postgreSQL """
     try:
         return psycopg2.connect(
             host = os.getenv("POSTGRES_HOST"),
@@ -17,3 +17,5 @@ def connection_db():
         )
     except DatabaseError as ex:
         raise ex
+
+# End-of-file

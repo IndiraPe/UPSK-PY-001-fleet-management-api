@@ -1,0 +1,95 @@
+info:
+  description: This is a API REST to query the locations of the vehicles of a taxi
+    company in Beijing, China.
+  title: ipp-fleet-management-api
+  version: 1.0.3
+paths:
+  /taxis:
+    get:
+      tags:
+      - taxis
+      summary: Returns all taxis
+      description: Returns all taxis (id, plate)
+      responses:
+        '200':
+          description: OK - All the taxis were successfully brought
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Taxi'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /trajectories/{taxi_id}/{date}:
+    get:
+      tags:
+      - trajectories
+      summary: Returns all trajectories filter by taxi_id and only date
+      description: Returns all trajectories (taxi_id, date)
+      parameters:
+      - name: taxi_id
+        in: path
+        description: ID of taxi to return
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: date
+        in: path
+        description: Date to return
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: OK - All the trajectories were successfully brought
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trajectorie'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+tags:
+- name: taxis
+  description: Taxi related operations
+- name: trajectories
+  description: Trajectories related operations
+openapi: 3.0.3
+components:
+  schemas:
+    Taxi:
+      type: object
+      properties:
+        id:
+          type: integer
+        plate:
+          type: string
+    Trajectorie:
+      type: object
+      properties:
+        taxi_id:
+          type: integer
+        date:
+          type: string
+          format: date-time
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+  responses:
+    NotFound:
+      description: No information found
+    BadRequest:
+      description: The data sent is incorrect
+    ServerError:
+      description: Server error
